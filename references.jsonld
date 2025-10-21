@@ -1,0 +1,38 @@
+{
+  "@context": "http://schema.org",
+  "@id": "https://github.com/bioexcel/biobb_dyna",
+  "@type": "ItemList",
+  "name": "biobb_dyna",
+  "itemListElement":[
+    {
+      "@type": "SoftwareApplication",
+      "description": "MDAnalysis",
+      "name": "MDAnalysis",
+      "url": "https://www.mdanalysis.org",
+      "applicationCategory": "Computational Biology tool",
+      "citation": "10.5281/zenodo.3241456",
+      "license": "BSD-2-Clause",
+      "softwareVersion": "2.0"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "description": "NetworkX",
+      "name": "NetworkX",
+      "url": "https://networkx.org",
+      "applicationCategory": "Graph analysis tool",
+      "citation": "10.5281/zenodo.1483513",
+      "license": "BSD-3-Clause",
+      "softwareVersion": "3.1"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "description": "mdigest",
+      "name": "mdigest",
+      "url": "https://mdigest.readthedocs.io",
+      "applicationCategory": "Bioinformatics tool",
+      "citation": "10.5281/zenodo.3241456",
+      "license": "BSD-2-Clause",
+      "softwareVersion": "1.0"  
+    }
+  ]
+}
