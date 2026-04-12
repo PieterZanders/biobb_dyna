@@ -137,7 +137,7 @@ def communities(input_graph_path: str,
                 output_communities_path: str, 
                 properties: dict = None, 
                 **kwargs) -> int:
-    """Create :class:`Communities <biobb_dyna.analysis.communities.Communities>` class and execute the :meth:`launch() <biobb_dyna.analysis.communities.Communities.launch>` method."""
+    """Create :class:`Communities <biobb_dyna.dyna.analysis.communities.Communities>` class and execute the :meth:`launch() <biobb_dyna.dyna.analysis.communities.Communities.launch>` method."""
     return Communities(input_graph_path=input_graph_path,
                       output_communities_path=output_communities_path,
                       properties=properties, **kwargs).launch()

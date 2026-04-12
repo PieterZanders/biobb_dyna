@@ -18,15 +18,15 @@ setuptools.setup(
         "Bioexcel": "https://bioexcel.eu/",
     },
     packages=setuptools.find_packages(exclude=["docs", "test"]),
-    package_data={"biobb_dyna": ["py.typed"]},
+    package_data={"biobb_dyna": ["py.typed", "json_schemas/*.json"]},
     install_requires=["biobb_common==5.0.0", "mdigest", "networkx", "MDAnalysis"],
     python_requires=">=3.9",
     entry_points={
         "console_scripts": [
-            "dccm = biobb_dyna.dyncorr.dccm:main",
-            "create_graph = biobb_dyna.network.create_graph:main",
-            "communities = biobb_dyna.analysis.communities:main",
-            "shortest_paths = biobb_dyna.analysis.shortest_paths:main",
+            "dccm = biobb_dyna.dyna.dyncorr.dccm:main",
+            "create_graph = biobb_dyna.dyna.network.create_graph:main",
+            "communities = biobb_dyna.dyna.analysis.communities:main",
+            "shortest_paths = biobb_dyna.dyna.analysis.shortest_paths:main",
         ]
     },
     classifiers=[

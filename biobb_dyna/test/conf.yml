@@ -1,0 +1,41 @@
+global_properties:
+  can_write_console_log: false
+  remove_tmp: true
+  working_dir_path: /tmp/biobb/unitests
+
+dccm:
+  paths:
+    input_traj_path: file:test_data_dir/dyna/example.xtc
+    input_top_path: file:test_data_dir/dyna/WT_apo_CA_ChainA.pdb
+    output_matrix_path: output_dccm.npz
+  properties:
+    matrix_type: correlation
+    dynamics_type: displacements
+    selection: name CA
+    stride_step: 10
+
+create_graph:
+  paths:
+    input_matrix_path: file:test_data_dir/dyna/output_dccm.npz
+    input_top_path: file:test_data_dir/dyna/WT_apo_CA_ChainA.pdb
+    output_graph_path: output_graph.graphml
+  properties:
+    prune_mode: none
+    corr_threshold: 0.0
+
+communities:
+  paths:
+    input_graph_path: file:test_data_dir/dyna/output_graph.graphml
+    output_communities_path: output_communities.json
+  properties:
+    algorithm: louvain
+    resolution: 1.0
+
+shortest_paths:
+  paths:
+    input_graph_path: file:test_data_dir/dyna/output_graph.graphml
+    output_shortest_paths_path: output_shortest_paths.json
+  properties:
+    source_residue: 1
+    sink_residue: 2
+    num_paths: 3

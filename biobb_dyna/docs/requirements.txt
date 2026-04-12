@@ -1,0 +1,5 @@
+sphinx>=5,<9
+sphinx_rtd_theme
+recommonmark
+# docutils pin optional; uncomment if RTD build requires it
+# docutils<0.21

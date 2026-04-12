@@ -28,8 +28,8 @@ wheels/
 # Jupyter and data files
 .ipynb_checkpoints/
 *.ipynb_checkpoints
-biobb_dyna/notebooks/
-biobb_dyna/notebooks/*
+biobb_dyna/dyna/notebooks/
+biobb_dyna/dyna/notebooks/*
 
 # Large data files
 *.pt

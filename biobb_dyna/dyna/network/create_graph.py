@@ -141,8 +141,8 @@ def create_graph(input_matrix_path: str,
                  output_graph_path: str, 
                  input_contact_matrix_path: str = None,
                  properties: dict = None, **kwargs) -> int:
-    """Create :class:`CreateGraph <biobb_dyna.network.create_graph.CreateGraph>` class and
-    execute the :meth:`launch() <biobb_dyna.network.create_graph.CreateGraph.launch>` method."""
+    """Create :class:`CreateGraph <biobb_dyna.dyna.network.create_graph.CreateGraph>` class and
+    execute the :meth:`launch() <biobb_dyna.dyna.network.create_graph.CreateGraph.launch>` method."""
     return CreateGraph(input_matrix_path=input_matrix_path,
                        input_top_path=input_top_path,
                        output_graph_path=output_graph_path,

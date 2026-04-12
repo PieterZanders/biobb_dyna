@@ -6,15 +6,15 @@ import networkx as nx
 import argparse
 import json
 
-class NodeDegree(BiobbObject):
+class EigenvectorCentrality(BiobbObject):
     """
-    | biobb_analysis NodeDegree
-    | Calculates node degree in a network graph using NetworkX.
-    | Calculates node degree in a network graph using NetworkX.
+    | biobb_analysis EigenvectorCentrality
+    | Calculates eigenvector centrality in a network graph using NetworkX.
+    | Calculates eigenvector centrality in a network graph using NetworkX.
 
     Args:
         input_graph_path (str): Path to input graph file (GraphML). File type: input. Accepted formats: graphml.
-        output_degree_path (str): Path to output node degree file (JSON). File type: output. Accepted formats: json.
+        output_eigenvector_path (str): Path to output eigenvector centrality file (JSON). File type: output. Accepted formats: json.
         properties (dict - Python dictionary object containing the tool parameters, not input/output files):
             * **remove_tmp** (*bool*) - (True) Remove temporary files.
             * **restart** (*bool*) - (False) Do not execute if output files exist.
@@ -38,13 +38,13 @@ class NodeDegree(BiobbObject):
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_graph_path, output_degree_path, properties=None, **kwargs) -> None:
+    def __init__(self, input_graph_path, output_eigenvector_path, properties=None, **kwargs) -> None:
         properties = properties or {}
         super().__init__(properties, **kwargs)
         self.locals_var_dict = locals().copy()
         self.io_dict = {
             "in": {"input_graph_path": input_graph_path},
-            "out": {"output_degree_path": output_degree_path}
+            "out": {"output_eigenvector_path": output_eigenvector_path}
         }
         self.properties = properties
         self.check_properties(properties)
@@ -52,34 +52,38 @@ class NodeDegree(BiobbObject):
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the node degree analysis using NetworkX."""
-        fu.log(f'Executing NodeDegree analysis', self.out_log, self.global_log)
+        """Execute the eigenvector centrality analysis using NetworkX."""
+        fu.log(f'Executing EigenvectorCentrality analysis', self.out_log, self.global_log)
         # Load graph
         G = nx.read_graphml(self.io_dict['in']['input_graph_path'])
         # Build mapping from node to residue number (resid)
         node_to_resid = {node: data.get('resid', node) for node, data in G.nodes(data=True)}
-        # Calculate degree for each node
-        degree_dict = dict(G.degree())
-        # Output as {resid: degree, ...}
-        output_dict = {str(node_to_resid[node]): value for node, value in degree_dict.items()}
-        with open(self.io_dict['out']['output_degree_path'], 'w') as f:
+        # Calculate eigenvector centrality
+        try:
+            eigenvector = nx.eigenvector_centrality(G)
+        except nx.NetworkXException as e:
+            fu.log(f'Error in eigenvector centrality calculation: {e}', self.out_log, self.global_log)
+            eigenvector = {}
+        # Output as {resid: eigenvector, ...}
+        output_dict = {str(node_to_resid[node]): value for node, value in eigenvector.items()}
+        with open(self.io_dict['out']['output_eigenvector_path'], 'w') as f:
             json.dump(output_dict, f, indent=2)
-        fu.log('NodeDegree analysis complete.', self.out_log, self.global_log)
+        fu.log('EigenvectorCentrality analysis complete.', self.out_log, self.global_log)
         return 0
 
-def node_degree(input_graph_path: str, 
-                output_degree_path: str, 
-                properties: dict = None, 
-                **kwargs) -> int:
-    """Create :class:`NodeDegree <biobb_dyna.analysis.node_degree.NodeDegree>` class and execute the :meth:`launch() <biobb_dyna.analysis.node_degree.NodeDegree.launch>` method."""
-    return NodeDegree(input_graph_path=input_graph_path,
-                     output_degree_path=output_degree_path,
-                     properties=properties, **kwargs).launch()
+def eigenvector_centrality(input_graph_path: str, 
+                           output_eigenvector_path: str, 
+                           properties: dict = None, 
+                           **kwargs) -> int:
+    """Create :class:`EigenvectorCentrality <biobb_dyna.dyna.analysis.eigenvector_centrality.EigenvectorCentrality>` class and execute the :meth:`launch() <biobb_dyna.dyna.analysis.eigenvector_centrality.EigenvectorCentrality.launch>` method."""
+    return EigenvectorCentrality(input_graph_path=input_graph_path,
+                                output_eigenvector_path=output_eigenvector_path,
+                                properties=properties, **kwargs).launch()
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
     parser = argparse.ArgumentParser(
-        description="Calculates node degree in a network graph.",
+        description="Calculates eigenvector centrality in a network graph.",
         formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
     )
     parser.add_argument(
@@ -97,16 +101,16 @@ def main():
     )
     required_args.add_argument(
         "-o",
-        "--output_degree_path",
+        "--output_eigenvector_path",
         required=True,
-        help="Path to output node degree file (JSON). Accepted formats: json.",
+        help="Path to output eigenvector centrality file (JSON). Accepted formats: json.",
     )
     args = parser.parse_args()
     config = args.config if args.config else None
     properties = settings.ConfReader(config=config).get_prop_dic()
-    node_degree(input_graph_path=args.input_graph_path,
-               output_degree_path=args.output_degree_path,
-               properties=properties)
+    eigenvector_centrality(input_graph_path=args.input_graph_path,
+                          output_eigenvector_path=args.output_eigenvector_path,
+                          properties=properties)
 
 if __name__ == "__main__":
     main()

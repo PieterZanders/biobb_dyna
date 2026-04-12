@@ -1,0 +1,97 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_dyna/json_schemas/1.0/shortest_paths",
+    "name": "biobb_dyna ShortestPaths",
+    "title": "Shortest paths between residues in a network graph.",
+    "description": "Finds up to N shortest simple paths between a source and sink residue (by resid attribute) and writes JSON.",
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "NetworkX",
+            "version": ">=2.5",
+            "license": "BSD"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_graph_path",
+        "output_shortest_paths_path"
+    ],
+    "properties": {
+        "input_graph_path": {
+            "type": "string",
+            "description": "Path to input GraphML graph (nodes should carry resid).",
+            "filetype": "input",
+            "file_formats": [
+                {
+                    "extension": ".*\\.graphml$",
+                    "description": "GraphML",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "output_shortest_paths_path": {
+            "type": "string",
+            "description": "Path to output JSON with paths and weights.",
+            "filetype": "output",
+            "file_formats": [
+                {
+                    "extension": ".*\\.json$",
+                    "description": "JSON",
+                    "edam": "format_3464"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "source_residue": {
+                    "type": ["integer", "string", "null"],
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Source residue id (must match node resid in graph)."
+                },
+                "sink_residue": {
+                    "type": ["integer", "string", "null"],
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Sink residue id."
+                },
+                "num_paths": {
+                    "type": "integer",
+                    "default": 1,
+                    "wf_prop": false,
+                    "description": "Maximum number of shortest simple paths to report."
+                },
+                "weight": {
+                    "type": "string",
+                    "default": "weight",
+                    "wf_prop": false,
+                    "description": "Edge attribute used as weight."
+                },
+                "method": {
+                    "type": "string",
+                    "default": "dijkstra",
+                    "wf_prop": false,
+                    "description": "Reserved for future path methods."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": false,
+                    "description": "Remove temporary files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "Skip execution if output already exists."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

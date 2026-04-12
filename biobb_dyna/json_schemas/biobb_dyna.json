@@ -1,0 +1,65 @@
+{
+    "_id": "biobb_dyna",
+    "desc": "biobb_dyna provides BioExcel building blocks for dynamical correlation, network construction from correlation matrices, and graph analysis (communities, shortest paths) using MDiGest, MDAnalysis, and NetworkX.",
+    "github": "https://github.com/bioexcel/biobb_dyna",
+    "readthedocs": "https://biobb-dyna.readthedocs.io/en/latest/",
+    "conda": "https://anaconda.org/bioconda/biobb_dyna",
+    "docker": "https://quay.io/repository/biocontainers/biobb_dyna",
+    "singularity": "https://depot.galaxyproject.org/singularity/biobb_dyna",
+    "version": "5.0.0",
+    "rest": true,
+    "tools": [
+        {
+            "block": "Dccm",
+            "tool": "dccm",
+            "desc": "Compute covariance, correlation, or LMI-based matrices from an MD trajectory (MDiGest DynCorr).",
+            "exec": "dccm",
+            "docs": "https://biobb-dyna.readthedocs.io/en/latest/",
+            "rest": true
+        },
+        {
+            "block": "CreateGraph",
+            "tool": "create_graph",
+            "desc": "Build a NetworkX graph from a correlation matrix (NPZ) and topology, optionally pruned by distance.",
+            "exec": "create_graph",
+            "docs": "https://biobb-dyna.readthedocs.io/en/latest/",
+            "rest": true
+        },
+        {
+            "block": "Communities",
+            "tool": "communities",
+            "desc": "Detect communities in a graph (GraphML) using NetworkX community algorithms.",
+            "exec": "communities",
+            "docs": "https://biobb-dyna.readthedocs.io/en/latest/",
+            "rest": true
+        },
+        {
+            "block": "ShortestPaths",
+            "tool": "shortest_paths",
+            "desc": "Compute shortest paths between residues in a graph (GraphML) and export JSON results.",
+            "exec": "shortest_paths",
+            "docs": "https://biobb-dyna.readthedocs.io/en/latest/",
+            "rest": true
+        }
+    ],
+    "dep_pypi": [
+        "install_requires=['biobb_common==5.0.0', 'mdigest', 'networkx', 'MDAnalysis']",
+        "python_requires='>=3.9'"
+    ],
+    "dep_conda": [
+        "python >=3.9,<3.13",
+        "biobb_common ==5.0.0",
+        "mdanalysis",
+        "networkx",
+        "mdigest"
+    ],
+    "keywords": [
+        "molecular dynamics",
+        "correlation",
+        "network",
+        "graph",
+        "MDAnalysis",
+        "community detection",
+        "shortest path"
+    ]
+}

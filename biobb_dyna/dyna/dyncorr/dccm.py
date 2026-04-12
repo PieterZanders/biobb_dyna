@@ -186,8 +186,8 @@ class Dccm(BiobbObject):
         return 0
     
 def compute_dccm(input_traj_path: str, input_top_path: str, output_matrix_path: str, properties: dict = None, **kwargs) -> int:
-    """Create :class:`Dccm <biobb_dyna.dyncorr.dccm.Dccm>` class and
-    execute the :meth:`launch() <biobb_dyna.dyncorr.dccm.Dccm.launch>` method."""
+    """Create :class:`Dccm <biobb_dyna.dyna.dyncorr.dccm.Dccm>` class and
+    execute the :meth:`launch() <biobb_dyna.dyna.dyncorr.dccm.Dccm.launch>` method."""
 
     return Dccm(input_traj_path=input_traj_path,
                  input_top_path=input_top_path,

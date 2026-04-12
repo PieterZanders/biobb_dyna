@@ -1,0 +1,86 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_dyna/json_schemas/1.0/communities",
+    "name": "biobb_dyna Communities",
+    "title": "Community detection in a protein network graph.",
+    "description": "Runs NetworkX community detection on a GraphML graph and writes partition summaries as JSON.",
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "NetworkX",
+            "version": ">=3.0",
+            "license": "BSD"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_graph_path",
+        "output_communities_path"
+    ],
+    "properties": {
+        "input_graph_path": {
+            "type": "string",
+            "description": "Path to input GraphML graph.",
+            "filetype": "input",
+            "file_formats": [
+                {
+                    "extension": ".*\\.graphml$",
+                    "description": "GraphML",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "output_communities_path": {
+            "type": "string",
+            "description": "Path to output JSON with community assignments and modularity.",
+            "filetype": "output",
+            "file_formats": [
+                {
+                    "extension": ".*\\.json$",
+                    "description": "JSON",
+                    "edam": "format_3464"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "algorithm": {
+                    "type": "string",
+                    "default": "louvain",
+                    "enum": ["louvain", "girvan_newman", "greedy_modularity", "label_propagation"],
+                    "wf_prop": false,
+                    "description": "Community detection algorithm."
+                },
+                "resolution": {
+                    "type": "number",
+                    "default": 1.0,
+                    "wf_prop": false,
+                    "description": "Resolution for Louvain / greedy modularity."
+                },
+                "max_levels": {
+                    "type": ["integer", "null"],
+                    "default": null,
+                    "wf_prop": false,
+                    "description": "Maximum partition levels to keep (null = all)."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": false,
+                    "description": "Remove temporary files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "Skip execution if output already exists."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

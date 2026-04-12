@@ -98,7 +98,7 @@ def shortest_paths(input_graph_path: str,
                    output_shortest_paths_path: str, 
                    properties: dict = None, 
                    **kwargs) -> int:
-    """Create :class:`ShortestPaths <biobb_dyna.analysis.shortest_paths.ShortestPaths>` class and execute the :meth:`launch() <biobb_dyna.analysis.shortest_paths.ShortestPaths.launch>` method."""
+    """Create :class:`ShortestPaths <biobb_dyna.dyna.analysis.shortest_paths.ShortestPaths>` class and execute the :meth:`launch() <biobb_dyna.dyna.analysis.shortest_paths.ShortestPaths.launch>` method."""
     return ShortestPaths(input_graph_path=input_graph_path,
                         output_shortest_paths_path=output_shortest_paths_path,
                         properties=properties, **kwargs).launch()

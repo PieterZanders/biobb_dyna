@@ -1,0 +1,129 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_dyna/json_schemas/1.0/create_graph",
+    "name": "biobb_dyna CreateGraph",
+    "title": "Build a residue network graph from a correlation matrix.",
+    "description": "Creates a weighted graph (GraphML) from an NPZ matrix (key dccm), a topology, and optional contact filtering / distance pruning.",
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "MDiGest / NetworkX",
+            "version": ">=0.1.0",
+            "license": "Apache-2.0 / BSD"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_matrix_path",
+        "input_top_path",
+        "output_graph_path"
+    ],
+    "properties": {
+        "input_matrix_path": {
+            "type": "string",
+            "description": "Path to input matrix NPZ (expects array key dccm).",
+            "filetype": "input",
+            "file_formats": [
+                {
+                    "extension": ".*\\.npz$",
+                    "description": "NumPy archive",
+                    "edam": "format_2333"
+                }
+            ]
+        },
+        "input_top_path": {
+            "type": "string",
+            "description": "Path to topology (e.g. PDB) for atom selection and distances.",
+            "filetype": "input",
+            "file_formats": [
+                {
+                    "extension": ".*\\.pdb$",
+                    "description": "Topology",
+                    "edam": "format_1476"
+                }
+            ]
+        },
+        "output_graph_path": {
+            "type": "string",
+            "description": "Path to output GraphML file.",
+            "filetype": "output",
+            "file_formats": [
+                {
+                    "extension": ".*\\.graphml$",
+                    "description": "GraphML",
+                    "edam": "format_2330"
+                }
+            ]
+        },
+        "input_contact_matrix_path": {
+            "type": "string",
+            "description": "Optional NPZ contact matrix multiplied with the correlation matrix.",
+            "filetype": "input",
+            "file_formats": [
+                {
+                    "extension": ".*\\.npz$",
+                    "description": "NumPy archive",
+                    "edam": "format_2333"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "selection": {
+                    "type": "string",
+                    "default": "name CA",
+                    "wf_prop": false,
+                    "description": "MDAnalysis selection for nodes."
+                },
+                "corr_threshold": {
+                    "type": "number",
+                    "default": 0.0,
+                    "wf_prop": false,
+                    "description": "Minimum absolute correlation for an edge."
+                },
+                "use_abs": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": false,
+                    "description": "Use absolute correlation values."
+                },
+                "loc_factor": {
+                    "type": "number",
+                    "default": 5.0,
+                    "wf_prop": false,
+                    "description": "Distance threshold (Angstrom) for pruning."
+                },
+                "prune_mode": {
+                    "type": "string",
+                    "default": "greater",
+                    "enum": ["greater", "lower", "none"],
+                    "wf_prop": false,
+                    "description": "How to combine distance pruning with correlations."
+                },
+                "exclude_neighbors": {
+                    "type": "integer",
+                    "default": 0,
+                    "wf_prop": false,
+                    "description": "Zero matrix entries for nodes within this index distance."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": false,
+                    "description": "Remove temporary files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "Skip execution if output already exists."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

@@ -6,80 +6,80 @@ import networkx as nx
 import argparse
 import json
 
-class NodeBetweenness(BiobbObject):
+class NodeDegeneracy(BiobbObject):
     """
-    | biobb_analysis NodeBetweenness
-    | Calculates node betweenness centrality in a network graph using NetworkX.
-    | Calculates node betweenness centrality in a network graph using NetworkX.
+    | biobb_analysis NodeDegeneracy
+    | Calculates node degeneracy (core number) in a network graph using NetworkX.
+    | Calculates node degeneracy (core number) in a network graph using NetworkX.
 
     Args:
         input_graph_path (str): Path to input graph file (GraphML). File type: input. Accepted formats: graphml.
-        output_betweenness_path (str): Path to output betweenness file (JSON). File type: output. Accepted formats: json.
+        output_degeneracy_path (str): Path to output node degeneracy file (JSON). File type: output. Accepted formats: json.
         properties (dict - Python dictionary object containing the tool parameters, not input/output files):
             * **remove_tmp** (*bool*) - (True) Remove temporary files.
             * **restart** (*bool*) - (False) Do not execute if output files exist.
 
     Examples:
-        from biobb_analysis.gromacs.gmx_betweenness import gmx_betweenness
-        prop = {}
-        Betweenness(input_graph_path='input_graph.graphml',
-                    output_betweenness_path='output_betweenness.json',
-                    properties=prop).launch()
+        from biobb_network.biobb_network.network_from_matrix import network_from_matrix
+        prop = {'corr_threshold': 0.5, 'prune_mode': 'none'}
+        network_from_matrix(input_matrix_path='/path/to/matrix.npz',
+                            input_top_path='/path/to/top.pdb',
+                            output_graph_path='/path/to/graph.graphml',
+                            properties=prop)
 
     Info:
         * wrapped_software:
             * name: NetworkX
             * version: >=2.5
-            * license: BSD
+            * license: BSD 
             * url: https://networkx.org/
         * ontology:
             * name: EDAM
             * schema: http://edamontology.org/EDAM.owl
     """
 
-    def __init__(self, input_graph_path, output_betweenness_path, properties=None, **kwargs) -> None:
+    def __init__(self, input_graph_path, output_degeneracy_path, properties=None, **kwargs) -> None:
         properties = properties or {}
         super().__init__(properties, **kwargs)
         self.locals_var_dict = locals().copy()
         self.io_dict = {
             "in": {"input_graph_path": input_graph_path},
-            "out": {"output_betweenness_path": output_betweenness_path}
+            "out": {"output_degeneracy_path": output_degeneracy_path}
         }
         self.properties = properties
-
         self.check_properties(properties)
         self.check_arguments()
 
     @launchlogger
     def launch(self) -> int:
-        """Execute the betweenness centrality analysis using NetworkX."""
-        fu.log(f'Executing Betweenness analysis', self.out_log, self.global_log)
+        """Execute the node degeneracy (core number) analysis using NetworkX."""
+        fu.log(f'Executing NodeDegeneracy analysis', self.out_log, self.global_log)
         # Load graph
         G = nx.read_graphml(self.io_dict['in']['input_graph_path'])
         # Build mapping from node to residue number (resid)
         node_to_resid = {node: data.get('resid', node) for node, data in G.nodes(data=True)}
-        # Calculate betweenness centrality
-        betweenness = nx.betweenness_centrality(G)
-        # Output as {resid: betweenness, ...}
-        output_dict = {str(node_to_resid[node]): value for node, value in betweenness.items()}
-        with open(self.io_dict['out']['output_betweenness_path'], 'w') as f:
+        # Calculate core number (degeneracy)
+        core_number = nx.core_number(G)
+        # Output as {resid: core_number, ...}
+        output_dict = {str(node_to_resid[node]): value for node, value in core_number.items()}
+        with open(self.io_dict['out']['output_degeneracy_path'], 'w') as f:
             json.dump(output_dict, f, indent=2)
-        fu.log('Betweenness analysis complete.', self.out_log, self.global_log)
+        fu.log('NodeDegeneracy analysis complete.', self.out_log, self.global_log)
         return 0
 
-def node_betweenness(input_graph_path: str, 
-                output_betweenness_path: str, 
-                properties: dict = None, 
-                **kwargs) -> int:
-    """Create :class:`NodeBetweenness <biobb_dyna.analysis.node_betweenness_centrality.NodeBetweenness>` class and execute the :meth:`launch() <biobb_dyna.analysis.node_betweenness_centrality.NodeBetweenness.launch>` method."""
-    return NodeBetweenness(input_graph_path=input_graph_path,
-                      output_betweenness_path=output_betweenness_path,
-                      properties=properties, **kwargs).launch()
+def node_degeneracy(input_graph_path: str, 
+                    output_degeneracy_path: str, 
+                    properties: dict = None, 
+                    **kwargs) -> int:
+    """Create :class:`NodeDegeneracy <biobb_dyna.dyna.analysis.node_degeneracy.NodeDegeneracy>` class and execute the :meth:`launch() <biobb_dyna.dyna.analysis.node_degeneracy.NodeDegeneracy.launch>` method."""
+    return NodeDegeneracy(input_graph_path=input_graph_path,
+                         output_degeneracy_path=output_degeneracy_path,
+                         properties=properties, **kwargs).launch()
 
 def main():
     """Command line execution of this building block. Please check the command line documentation."""
     parser = argparse.ArgumentParser(
-        description="Calculates betweenness centrality in a network graph.",
+        description="Calculates node degeneracy (core number) in a network graph.",
         formatter_class=lambda prog: argparse.RawTextHelpFormatter(prog, width=99999),
     )
     parser.add_argument(
@@ -97,16 +97,16 @@ def main():
     )
     required_args.add_argument(
         "-o",
-        "--output_betweenness_path",
+        "--output_degeneracy_path",
         required=True,
-        help="Path to output betweenness file (JSON). Accepted formats: json.",
+        help="Path to output node degeneracy file (JSON). Accepted formats: json.",
     )
     args = parser.parse_args()
     config = args.config if args.config else None
     properties = settings.ConfReader(config=config).get_prop_dic()
-    node_betweenness(input_graph_path=args.input_graph_path,
-                output_betweenness_path=args.output_betweenness_path,
-                properties=properties)
+    node_degeneracy(input_graph_path=args.input_graph_path,
+                   output_degeneracy_path=args.output_degeneracy_path,
+                   properties=properties)
 
 if __name__ == "__main__":
     main()

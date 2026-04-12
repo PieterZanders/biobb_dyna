@@ -1,0 +1,112 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://bioexcel.eu/biobb_dyna/json_schemas/1.0/dccm",
+    "name": "biobb_dyna Dccm",
+    "title": "Dynamical correlation / covariance matrices from MD trajectories.",
+    "description": "Computes per-atom covariance, correlation, or LMI-based matrices from a trajectory using MDiGest (DynCorr / DihDynCorr).",
+    "type": "object",
+    "info": {
+        "wrapped_software": {
+            "name": "MDiGest",
+            "version": ">=0.1.0",
+            "license": "Apache-2.0"
+        },
+        "ontology": {
+            "name": "EDAM",
+            "schema": "http://edamontology.org/EDAM.owl"
+        }
+    },
+    "required": [
+        "input_traj_path",
+        "input_top_path",
+        "output_matrix_path"
+    ],
+    "properties": {
+        "input_traj_path": {
+            "type": "string",
+            "description": "Path to the MD trajectory file (e.g. XTC, DCD).",
+            "filetype": "input",
+            "file_formats": [
+                {
+                    "extension": ".*\\.(xtc|dcd|trr)$",
+                    "description": "Trajectory",
+                    "edam": "format_1476"
+                }
+            ]
+        },
+        "input_top_path": {
+            "type": "string",
+            "description": "Path to the topology file (e.g. PDB).",
+            "filetype": "input",
+            "file_formats": [
+                {
+                    "extension": ".*\\.pdb$",
+                    "description": "Topology",
+                    "edam": "format_1476"
+                }
+            ]
+        },
+        "output_matrix_path": {
+            "type": "string",
+            "description": "Path to save the matrix as a NumPy .npz archive (key: dccm).",
+            "filetype": "output",
+            "file_formats": [
+                {
+                    "extension": ".*\\.npz$",
+                    "description": "NumPy archive",
+                    "edam": "format_2333"
+                }
+            ]
+        },
+        "properties": {
+            "type": "object",
+            "properties": {
+                "matrix_type": {
+                    "type": "string",
+                    "default": "correlation",
+                    "enum": ["covariance", "correlation", "lmi"],
+                    "wf_prop": false,
+                    "description": "Type of matrix to extract."
+                },
+                "selection": {
+                    "type": "string",
+                    "default": "name CA",
+                    "wf_prop": false,
+                    "description": "MDAnalysis atom selection (displacements)."
+                },
+                "dynamics_type": {
+                    "type": "string",
+                    "default": "displacements",
+                    "enum": ["displacements", "dihedrals"],
+                    "wf_prop": false,
+                    "description": "Use Cartesian displacements or backbone dihedrals."
+                },
+                "stride_step": {
+                    "type": "integer",
+                    "default": 1,
+                    "wf_prop": false,
+                    "description": "Frame stride for parsing the trajectory."
+                },
+                "normalize": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": false,
+                    "description": "Normalize correlation / LMI matrices."
+                },
+                "remove_tmp": {
+                    "type": "boolean",
+                    "default": true,
+                    "wf_prop": false,
+                    "description": "Remove temporary files."
+                },
+                "restart": {
+                    "type": "boolean",
+                    "default": false,
+                    "wf_prop": false,
+                    "description": "Skip execution if output already exists."
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}
